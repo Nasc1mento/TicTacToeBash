@@ -24,16 +24,9 @@ table(){
 
 
 check_board(){
-    count=0
-    for i in ${values[@]}
-    do
-        if ! [[ $i =~ $re_number ]]
-        then 
-            count 
-        fi
-    done
-    return $count
-       
+
+    if (("${values[1]}" == "X" & "${values[2]}" == "X" & "${values[3]}" == "X")); then exit; fi
+
 }
 
 
@@ -43,23 +36,26 @@ plays(){
         values[$index]="X" 
     elif [ $player_turn -eq 2 ]
     then
-        values[$index]="O" 
+        values[$index]="O"
     fi
 }
 
 loop(){
-    while [ true ]
-    do
+    while [ $(winner) == false ]
+    do        
         read -p " Where do you want to play $(current_player)? " index
         plays index
         table
+        check_board
         change
+        
+
     done
 }
 
 
 change(){
-    if [ $player_turn == 1 ]
+    if [ $player_turn -eq 1 ]
     then
         player_turn=2
     elif [ $player_turn -eq 2 ]
@@ -80,7 +76,7 @@ current_player(){
     elif [ $player_turn -eq 2 ]
     then
         echo $player2
-    fi   
+    fi
 }
 
 
