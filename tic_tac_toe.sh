@@ -3,7 +3,8 @@
 
 declare -A values
 values=([1]=1 [2]=2 [3]=3 [4]=4 [5]=5 [6]=6 [7]=7 [8]=8 [9]=9)
-
+re_isnumber="^[0-9]+$"
+player_turn=1
 
 
 
@@ -21,27 +22,80 @@ table(){
     echo -e "\n"
 }
 
-table
+
 check_board(){
-    echo "s"
+    count=0
+    for i in ${values[@]}
+    do
+        if ! [[ $i =~ $re_number ]]
+        then 
+            count 
+        fi
+    done
+    return $count
+       
+}
+
+
+plays(){
+    if [ $player_turn -eq 1 ]
+    then
+        values[$index]="X" 
+    elif [ $player_turn -eq 2 ]
+    then
+        values[$index]="O" 
+    fi
 }
 
 loop(){
-    echo ""
+    while [ true ]
+    do
+        read -p " Where do you want to play $(current_player)? " index
+        plays index
+        table
+        change
+    done
 }
 
 
 change(){
-    echo ""
+    if [ $player_turn == 1 ]
+    then
+        player_turn=2
+    elif [ $player_turn -eq 2 ]
+    then
+        player_turn=1
+    fi
 }
 
+create_player(){
+    read -p "Player 1 name: " player1
+    read -p "Player 2 name: " player2
+}
+
+current_player(){
+    if [ $player_turn -eq 1 ]
+    then
+        echo $player1
+    elif [ $player_turn -eq 2 ]
+    then
+        echo $player2
+    fi   
+}
+
+
+winner(){
+    echo false
+}
 
 
 main(){
-    echo ""
+    create_player
+    table
+    loop
 }
 
-
+main
 
 
 
