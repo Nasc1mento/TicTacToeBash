@@ -24,11 +24,25 @@ table(){
 
 
 check_board(){
-    if [[ "${values[1]}" == "X" ]] && [[ "${values[2]}" == "X" ]] && [[ "${values[3]}" == "X" ]] 
-    then echo "sim"
-    else
-        echo "na0"
-    fi
+    for (( i=1; i<=${#values[@]}; i+=3 ))
+    do
+        if [[ "${values[$i]}" == "${values[$((i+1))]}" ]] && [[ "${values[$i]}" == "${values[$((i+2))]}" ]]; then winner true; fi
+    done
+
+    for (( i=1; i<=${#values[@]}; i++ ))
+    do
+        if [[ "${values[$i]}" == "${values[$((i+3))]}" ]] && [[ "${values[$i]}" == "${values[$((i+6))]}" ]]; then winner true; fi
+    done
+
+    for (( i=1; i<=${#values[@]}; i+=4 ))
+    do
+        if [[ "${values[$i]}" == "${values[$((i+4))]}" ]] && [[ "${values[$i]}" == "${values[$((i+8))]}" ]]; then winner true; fi
+    done
+
+    for (( i=1; i<=${#values[@]}; i+=4 ))
+    do
+        if [[ "${values[$i]}" == "${values[$((i+4))]}" ]] && [[ "${values[$i]}" == "${values[$((i+8))]}" ]]; then winner true; fi
+    done
 }
 
 
@@ -44,7 +58,7 @@ plays(){
 
 loop(){
     while [ $(winner) == false ]
-    do        
+    do
         read -p " Where do you want to play $(current_player)? " index
         plays index
         table
@@ -81,6 +95,7 @@ current_player(){
 
 
 winner(){
+    if [ "$1" == "true" ]; then echo "Congratulations ${player_turn}"; exit; fi
     echo false
 }
 
