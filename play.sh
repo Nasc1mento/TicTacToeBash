@@ -1,5 +1,13 @@
 #!/bin/bash
 
+#AUTOR
+# Adryan Reis  <github.com/Nasc1mento>
+#
+#
+
+
+cat ./components/title.txt
+
 
 declare -A values
 values=([1]=1 [2]=2 [3]=3 [4]=4 [5]=5 [6]=6 [7]=7 [8]=8 [9]=9)
@@ -39,9 +47,9 @@ check_board(){
         if [[ "${values[$i]}" == "${values[$((i+4))]}" ]] && [[ "${values[$i]}" == "${values[$((i+8))]}" ]]; then winner true; fi
     done
 
-    for (( i=1; i<=${#values[@]}; i+=4 ))
+    for (( i=3; i<=${#values[@]}; i+=2 ))
     do
-        if [[ "${values[$i]}" == "${values[$((i+4))]}" ]] && [[ "${values[$i]}" == "${values[$((i+8))]}" ]]; then winner true; fi
+        if [[ "${values[$i]}" == "${values[$((i+2))]}" ]] && [[ "${values[$i]}" == "${values[$((i+4))]}" ]]; then winner true; fi
     done
 }
 
@@ -49,7 +57,7 @@ check_board(){
 plays(){
     if [ $player_turn -eq 1 ]
     then
-        values[$index]="X" 
+        values[$index]="X"
     elif [ $player_turn -eq 2 ]
     then
         values[$index]="O"
@@ -59,7 +67,8 @@ plays(){
 loop(){
     while [ $(winner) == false ]
     do
-        read -p " Where do you want to play $(current_player)? " index
+	echo "Turn: $(current_player)"
+        check_play
         plays index
         table
         check_board
@@ -93,9 +102,13 @@ current_player(){
     fi
 }
 
+check_play(){
+    read -p "> " index
+    while ! [[ $index =~ $re_isnumber ]] || ! [[ ${values[$index]} =~ $re_isnumber ]]; do check_play index; done
+}
 
 winner(){
-    if [ "$1" == "true" ]; then echo "Congratulations ${player_turn}"; exit; fi
+    if [ "$1" == "true" ]; then echo "$(current_player) Win !!!"; exit; fi
     echo false
 }
 
@@ -107,7 +120,6 @@ main(){
 }
 
 main
-
 
 
 
