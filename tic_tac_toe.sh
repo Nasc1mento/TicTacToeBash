@@ -24,9 +24,11 @@ table(){
 
 
 check_board(){
-
-    if (("${values[1]}" == "X" & "${values[2]}" == "X" & "${values[3]}" == "X")); then exit; fi
-
+    if [[ "${values[1]}" == "X" ]] && [[ "${values[2]}" == "X" ]] && [[ "${values[3]}" == "X" ]] 
+    then echo "sim"
+    else
+        echo "na0"
+    fi
 }
 
 
@@ -48,8 +50,6 @@ loop(){
         table
         check_board
         change
-        
-
     done
 }
 
