@@ -6,28 +6,15 @@
 #
 
 source ./components/title.sh
+source ./components/table.sh
 
 
-declare -A values
-values=([1]=1 [2]=2 [3]=3 [4]=4 [5]=5 [6]=6 [7]=7 [8]=8 [9]=9)
+
 re_isnumber="^[0-9]+$"
 player_turn=1 #temporary
-square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}') #key
 
 
-table(){
-    echo -e "\n"
-    echo -e "\t|‾‾‾‾‾|‾‾‾‾‾|‾‾‾‾‾|"
-    echo -e "\t|  ${values[1]}  |  ${values[2]}  |  ${values[3]}  |"
-    echo -e "\t|_____|_____|_____|"
-    echo -e "\t|     |     |     |"
-    echo -e "\t|  ${values[4]}  |  ${values[5]}  |  ${values[6]}  |"
-    echo -e "\t|_____|_____|_____|"
-    echo -e "\t|     |     |     |"
-    echo -e "\t|  ${values[7]}  |  ${values[8]}  |  ${values[9]}  |"
-    echo -e "\t|_____|_____|_____|"
-    echo -e "\n"
-}
+
 
 check_board(){
     #row
@@ -83,7 +70,7 @@ loop(){
 	echo "Turn: $(current_player)"
         check_play
         plays index
-        table
+        show_table
         check_board index
         change
     done
@@ -132,7 +119,7 @@ is_tie(){
 main(){
     print_title
     create_player
-    table
+    show_table
     loop
 }
 
