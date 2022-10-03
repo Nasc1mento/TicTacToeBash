@@ -7,7 +7,7 @@ git clone https://github.com/Nasc1mento/TicTacToe-Shell
 ```
 - To grant the permissions
 ```
-cd && chmod +x play.sh
+cd TicTacToe-Shell && chmod +x play.sh
 ```
 - To execute
 ```
