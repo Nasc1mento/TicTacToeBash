@@ -4,8 +4,8 @@
 # Adryan Reis  <github.com/Nasc1mento>
 #
 #
-source ./components/title.sh
-source ./components/table.sh
+source ./lib/title.sh
+source ./lib/table.sh
 
 check_board(){
     #row
@@ -29,16 +29,16 @@ check_board(){
         done
     done
     #diagonal_right
+    count_diagonal_right=0
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
-    do
-        count_diagonal_right=0
+    do 
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]]; then count_diagonal_right=$((count_diagonal_right+1)); fi
         if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then echo "dr"; winner true; fi
     done
     #diagonal_left
+    count_diagonal_left=0
     for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
-        count_diagonal_left=0
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
         if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then echo "dl"; winner true; fi
     done 
