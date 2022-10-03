@@ -4,17 +4,8 @@
 # Adryan Reis  <github.com/Nasc1mento>
 #
 #
-
 source ./components/title.sh
 source ./components/table.sh
-
-
-
-re_isnumber="^[0-9]+$"
-player_turn=1 #temporary
-
-
-
 
 check_board(){
     #row
@@ -119,6 +110,12 @@ is_tie(){
 main(){
     print_title
     create_player
+    re_isnumber="^[0-9]+$"
+    player_turn=1
+    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4... >=2 or <=9)"
+    check_length
+    mount_array $resp_length
+    square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
     show_table
     loop
 }
