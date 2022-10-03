@@ -5,15 +5,14 @@
 #
 #
 
-
-cat ./components/title.txt
+source ./components/title.sh
 
 
 declare -A values
 values=([1]=1 [2]=2 [3]=3 [4]=4 [5]=5 [6]=6 [7]=7 [8]=8 [9]=9)
 re_isnumber="^[0-9]+$"
-player_turn=1
-
+player_turn=1 #temporary
+square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}') #key
 
 
 table(){
@@ -30,27 +29,41 @@ table(){
     echo -e "\n"
 }
 
-
 check_board(){
-    for (( i=1; i<=${#values[@]}; i+=3 ))
+    #row
+    for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
     do
-        if [[ "${values[$i]}" == "${values[$((i+1))]}" ]] && [[ "${values[$i]}" == "${values[$((i+2))]}" ]]; then winner true; fi
+        count_row=0
+        for (( j=$i; j<=$square_root_table; j++ ))
+        do
+            if  [[ "${values[$j]}" == "${values[$((i+j))]}" ]]; then count_row=$((count_row+1)); fi
+            if [[ "$count_row" == "$((square_root_table-1))" ]]; then echo "row"; winner true; fi
+        done
     done
-
-    for (( i=1; i<=${#values[@]}; i++ ))
+    #col
+    for (( i=1; i<=$square_root_table; i++ ))
     do
-        if [[ "${values[$i]}" == "${values[$((i+3))]}" ]] && [[ "${values[$i]}" == "${values[$((i+6))]}" ]]; then winner true; fi
+        count_col=0
+        for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
+        do
+            if  [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]]; then count_col=$((count_col+1)); fi
+            if [[ "$count_col" == "$((square_root_table-1))" ]]; then echo "col"; winner true; fi
+        done
     done
-
-    for (( i=1; i<=${#values[@]}; i+=4 ))
+    #diagonal_right
+    for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
     do
-        if [[ "${values[$i]}" == "${values[$((i+4))]}" ]] && [[ "${values[$i]}" == "${values[$((i+8))]}" ]]; then winner true; fi
+        count_diagonal_right=0
+        if  [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]]; then count_diagonal_right=$((count_diagonal_right+1)); fi
+        if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then echo "dr"; winner true; fi
     done
-
-    for (( i=3; i<=${#values[@]}; i+=2 ))
+    #diagonal_left
+    for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
-        if [[ "${values[$i]}" == "${values[$((i+2))]}" ]] && [[ "${values[$i]}" == "${values[$((i+4))]}" ]]; then winner true; fi
-    done
+        count_diagonal_left=0
+        if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
+        if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then echo "dl"; winner true; fi
+    done 
 }
 
 
@@ -71,7 +84,7 @@ loop(){
         check_play
         plays index
         table
-        check_board
+        check_board index
         change
     done
 }
@@ -112,8 +125,12 @@ winner(){
     echo false
 }
 
+is_tie(){
+    echo ""
+}
 
 main(){
+    print_title
     create_player
     table
     loop
