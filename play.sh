@@ -8,7 +8,6 @@ source ./lib/title.sh
 source ./lib/table.sh
 
 check_board(){
-    
     #row
     for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
     do
@@ -32,7 +31,7 @@ check_board(){
     #diagonal_right
     count_diagonal_right=0
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
-    do 
+    do
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]]; then count_diagonal_right=$((count_diagonal_right+1)); fi
         if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then winner true; fi
     done
@@ -42,18 +41,12 @@ check_board(){
     do
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
         if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then winner true; fi
-    done 
+    done
 }
 
 
 plays(){
-    if [ $player_turn -eq 1 ]
-    then
-        values[$index]="X"
-    elif [ $player_turn -eq 2 ]
-    then
-        values[$index]="O"
-    fi
+    [ $player_turn -eq 1 ] && values[$index]="X" || values[$index]="O" 
 }
 
 loop(){
@@ -69,14 +62,8 @@ loop(){
 }
 
 
-change(){
-    if [ $player_turn -eq 1 ]
-    then
-        player_turn=2
-    elif [ $player_turn -eq 2 ]
-    then
-        player_turn=1
-    fi
+change(){ 
+    [ $player_turn -eq 1 ] && player_turn=2 || player_turn=1
 }
 
 create_player(){
@@ -85,13 +72,7 @@ create_player(){
 }
 
 current_player(){
-    if [ $player_turn -eq 1 ]
-    then
-        echo $player1
-    elif [ $player_turn -eq 2 ]
-    then
-        echo $player2
-    fi
+    [ $player_turn -eq 1 ] && echo $player1 || echo $player2
 }
 
 check_play(){
