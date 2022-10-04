@@ -12,9 +12,9 @@ check_board(){
     for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
     do
         count_row=0
-        for (( j=$i; j<=$square_root_table; j++ ))
+        for (( j=$i; j<=$square_root_table+i-1; j++ ))
         do
-            if  [[ "${values[$j]}" == "${values[$((i+j))]}" ]]; then count_row=$((count_row+1)); fi
+            if  [[ "${values[$j]}" == "${values[$((j+1))]}" ]]; then count_row=$((count_row+1)); fi
             if [[ "$count_row" == "$((square_root_table-1))" ]]; then winner true; fi
         done
     done
