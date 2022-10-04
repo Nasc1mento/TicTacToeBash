@@ -8,6 +8,7 @@ source ./lib/title.sh
 source ./lib/table.sh
 
 check_board(){
+    
     #row
     for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
     do
@@ -15,7 +16,7 @@ check_board(){
         for (( j=$i; j<=$square_root_table; j++ ))
         do
             if  [[ "${values[$j]}" == "${values[$((i+j))]}" ]]; then count_row=$((count_row+1)); fi
-            if [[ "$count_row" == "$((square_root_table-1))" ]]; then echo "row"; winner true; fi
+            if [[ "$count_row" == "$((square_root_table-1))" ]]; then winner true; fi
         done
     done
     #col
@@ -25,7 +26,7 @@ check_board(){
         for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
         do
             if  [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]]; then count_col=$((count_col+1)); fi
-            if [[ "$count_col" == "$((square_root_table-1))" ]]; then echo "col"; winner true; fi
+            if [[ "$count_col" == "$((square_root_table-1))" ]]; then winner true; fi
         done
     done
     #diagonal_right
@@ -33,14 +34,14 @@ check_board(){
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
     do 
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]]; then count_diagonal_right=$((count_diagonal_right+1)); fi
-        if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then echo "dr"; winner true; fi
+        if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then winner true; fi
     done
     #diagonal_left
     count_diagonal_left=0
     for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
-        if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then echo "dl"; winner true; fi
+        if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then winner true; fi
     done 
 }
 
@@ -61,7 +62,7 @@ loop(){
 	echo "Turn: $(current_player)"
         check_play
         plays index
-        show_table
+        show_table index
         check_board index
         change
     done
@@ -112,7 +113,7 @@ main(){
     create_player
     re_isnumber="^[0-9]+$"
     player_turn=1
-    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4... >=2 or <=9)"
+    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4... >=2 and <=9)"
     check_length
     mount_array $resp_length
     square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
@@ -121,6 +122,5 @@ main(){
 }
 
 main
-
 
 

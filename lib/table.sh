@@ -18,9 +18,10 @@ show_table(){
 		middle_bottom=""
 		for (( j=$i; j<=$i+$square_root_table-1; j++ ))
 		do
-		if [ $j -ge 10 ]; then middle_top+="  ${values[j]} |"; else middle_top+="  ${values[j]}  |"; fi
 		middle_core+="_____|"
 		middle_bottom+="     |"
+		if ! [[ ${values[$j]} =~ $re_isnumber ]]; then middle_top+="  ${values[j]}  |"; continue; fi
+		if [ $j -ge 10 ]; then middle_top+="  ${values[j]} |"; else middle_top+="  ${values[j]}  |"; fi
 		done
 		echo -e "\t|$middle_top"
 		echo -e "\t|$middle_core"
