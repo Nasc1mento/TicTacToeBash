@@ -26,7 +26,6 @@ table_core(){
 		echo -e "\t|$middle_top"
 		echo -e "\t|$middle_core"
 		[[ $i == $(( ${#values[@]} - $square_root_table + 1)) ]] && break || echo -e "\t|$middle_bottom"
-		
 	done
 }
 

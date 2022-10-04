@@ -4,7 +4,7 @@
 # Adryan Reis  <github.com/Nasc1mento>
 #
 #
-source ./lib/title.sh
+source ./lib/print_components.sh
 source ./lib/table.sh
 
 check_board(){
@@ -77,11 +77,12 @@ current_player(){
 
 check_play(){
     read -p "> " index
-    while ! [[ $index =~ $re_isnumber ]] || ! [[ ${values[$index]} =~ $re_isnumber ]]; do check_play index; done
+    if ! [[ $index =~ $re_isnumber ]] || ! [[ ${values[$index]} =~ $re_isnumber ]]; then check_play index; fi
 }
 
 winner(){
-    if [ "$1" == "true" ]; then echo "$(current_player) Win !!!"; exit; fi
+    [ "$1" == "true" ] && echo "$(current_player) Win !!!" && exit
+    #if [ "$1" == "true" ]; then echo "$(current_player) Win !!!"; exit; fi
     echo false
 }
 
@@ -89,12 +90,11 @@ is_tie(){
     echo ""
 }
 
-main(){
-    print_title
+start(){
     create_player
     re_isnumber="^[0-9]+$"
     player_turn=1
-    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4... >=2 and <=9)"
+    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
     check_length
     mount_array $resp_length
     square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
@@ -102,6 +102,19 @@ main(){
     loop
 }
 
-main
+menu(){
+    _PRINT "title.txt"
+    index=""
+    for option in "Start game" "About" "Exit"; do
+        index=$(($index+1))
+        echo "[$index]$option"
+    done
+    read -p $'\n> ' choice
+    case $choice in
+        1) start;;
+        2) _PRINT "about.txt" && menu;;
+        3) exit;;
+    esac
+}
 
-
+menu

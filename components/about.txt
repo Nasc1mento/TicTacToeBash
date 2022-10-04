@@ -5,3 +5,8 @@
  / ___ \| |_) | (_) | |_| | |_ 
 /_/   \_\_.__/ \___/ \__,_|\__|
                                
+                               
+Created by Adryan N. Reis
+Source code <github.com/Nascimento/TicTacToe-Shell>
+
+
