@@ -62,8 +62,8 @@ loop(){
 	echo "Turn: $(current_player)"
         check_play
         plays index
-        show_table index
-        check_board index
+        show_table
+        check_board
         change
     done
 }
