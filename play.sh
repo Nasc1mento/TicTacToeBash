@@ -8,11 +8,12 @@ source ./lib/print_components.sh
 source ./lib/table.sh
 
 check_board(){
+    count_play=$((count_play+1))
     #row
     for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
     do
         count_row=0
-        for (( j=$i; j<=$square_root_table+i-1; j++ ))
+        for (( j=$i; j<=$i+$square_root_table-2; j++ ))
         do
             if  [[ "${values[$j]}" == "${values[$((j+1))]}" ]]; then count_row=$((count_row+1)); fi
             if [[ "$count_row" == "$((square_root_table-1))" ]]; then winner true; fi
@@ -42,6 +43,8 @@ check_board(){
         if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
         if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then winner true; fi
     done
+
+    [ $count_play -eq ${#values[@]} ] && is_tie
 }
 
 
@@ -81,14 +84,29 @@ check_play(){
 }
 
 winner(){
-    [ "$1" == "true" ] && echo "$(current_player) Win !!!" && exit
-    #if [ "$1" == "true" ]; then echo "$(current_player) Win !!!"; exit; fi
+    #[ "$1" == "true" ] && echo "$(current_player) Win !!!" && exit
+    if [ "$1" == "true" ]; then 
+        echo "$(current_player) Win !!!"
+        save_csv $(current_player)
+        exit
+    fi
     echo false
 }
 
 is_tie(){
-    echo ""
+    echo "Tie !!!"
+    save_csv "Tie"
+    exit
 }
+
+
+save_csv(){
+    File="components/log.csv"
+    Header="Player1,Player2,Date,Winner,Modality"
+    [ -s $File ] || echo $Header >> $File
+    echo "$player1,$player2,`date`,$1,$square_root_table x $square_root_table" >> $File
+}
+
 
 start(){
     create_player
