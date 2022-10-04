@@ -1,13 +1,13 @@
-# TicTacToe-Bash
+# TicTacToeBash
 
 
 - Clone the repository
 ```
-git clone https://github.com/Nasc1mento/TicTacToe-Shell
+git clone https://github.com/Nasc1mento/TicTacToeBash
 ```
 - To grant the permissions
 ```
-cd TicTacToe-Shell && chmod +x play.sh
+cd TicTacToeBash && chmod +x play.sh
 ```
 - To execute
 ```
