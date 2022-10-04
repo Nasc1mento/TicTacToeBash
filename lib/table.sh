@@ -21,15 +21,12 @@ table_core(){
 			middle_core+="_____|"
 			middle_bottom+="     |"
 			if ! [[ ${values[$j]} =~ $re_isnumber ]]; then middle_top+="  ${values[j]}  |"; continue; fi
-			if [ $j -ge 10 ]; then middle_top+="  ${values[j]} |"; else middle_top+="  ${values[j]}  |"; fi
+			[ $j -ge 10 ] && middle_top+="  ${values[j]} |" || middle_top+="  ${values[j]}  |"
 		done
-		# if [ $j -le ${#values[@]}-$square_root_table ]
-		# then
-
 		echo -e "\t|$middle_top"
 		echo -e "\t|$middle_core"
-		if  [[ $i == $(( ${#values[@]} - $square_root_table + 1)) ]]; then break ; fi
-		echo -e "\t|$middle_bottom"
+		[[ $i == $(( ${#values[@]} - $square_root_table + 1)) ]] && break || echo -e "\t|$middle_bottom"
+		
 	done
 }
 
