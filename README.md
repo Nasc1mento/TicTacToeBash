@@ -14,3 +14,5 @@ chmod +x play.sh
 ```
 ./play.sh
 ```
+- or just visit the worse version <a href="https://replit.com/@AdryanReis/TicTacToeBash?v=1" target="_blank">Here!<a/>
+
