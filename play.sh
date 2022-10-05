@@ -111,6 +111,7 @@ is_tie(){
 
 reset(){
     count_play=0
+    values=()
 }
 
 start(){

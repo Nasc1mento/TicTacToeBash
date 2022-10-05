@@ -7,6 +7,6 @@
                                
                                
 Created by Adryan N. Reis
-Source code <github.com/Nascimento/TicTacToe-Shell>
+Source code <github.com/Nascimento/TicTacToeBash>
 
 
