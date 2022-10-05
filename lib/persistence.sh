@@ -8,7 +8,8 @@ persistence(){
 
 show_persistence(){
     _PRINT "history.txt"
-    [ -f $File ] && sed 's/,,/, ,/g;s/,,/, ,/g' $File | column -s, -t || echo "Empty!"
+    # File exists and it's empty
+    [ -f $File ] && [ -s $File ] && sed 's/,,/, ,/g;s/,,/, ,/g' $File | column -s, -t || echo "Empty!"
 }
     
 
