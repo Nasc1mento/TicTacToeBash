@@ -96,7 +96,8 @@ winner(){
     if [ "$1" == "true" ]; then 
         echo "$(current_player) Win !!!"
         persistence $(current_player)
-        exit
+        reset
+        menu
     fi
     echo false
 }
@@ -107,6 +108,10 @@ is_tie(){
     exit
 }
 
+
+reset(){
+    count_play=0
+}
 
 start(){
     create_player
