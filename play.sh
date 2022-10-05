@@ -6,6 +6,7 @@
 #
 source ./lib/print_components.sh
 source ./lib/table.sh
+source ./lib/persistence.sh
 
 check_board(){
     count_play=$((count_play+1))
@@ -15,8 +16,8 @@ check_board(){
         count_row=0
         for (( j=$i; j<=$i+$square_root_table-2; j++ ))
         do
-            if  [[ "${values[$j]}" == "${values[$((j+1))]}" ]]; then count_row=$((count_row+1)); fi
-            if [[ "$count_row" == "$((square_root_table-1))" ]]; then winner true; fi
+            [[ "${values[$j]}" == "${values[$((j+1))]}" ]] && count_row=$((count_row+1))
+            [[ "$count_row" == "$((square_root_table-1))" ]] && winner true
         done
     done
     #col
@@ -25,28 +26,36 @@ check_board(){
         count_col=0
         for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
         do
-            if  [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]]; then count_col=$((count_col+1)); fi
-            if [[ "$count_col" == "$((square_root_table-1))" ]]; then winner true; fi
+            [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]] && count_col=$((count_col+1))
+            [[ "$count_col" == "$((square_root_table-1))" ]] && winner true
         done
     done
     #diagonal_right
     count_diagonal_right=0
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
     do
-        if  [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]]; then count_diagonal_right=$((count_diagonal_right+1)); fi
-        if [[ "$count_diagonal_right" == "$((square_root_table-1))" ]]; then winner true; fi
+        [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
+        [[ "$count_diagonal_right" == "$((square_root_table-1))" ]] && winner true
     done
     #diagonal_left
     count_diagonal_left=0
     for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
-        if  [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]]; then count_diagonal_left=$((count_diagonal_left+1)); fi
-        if [[ "$count_diagonal_left" == "$((square_root_table-1))" ]]; then winner true; fi
+        [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
+        [[ "$count_diagonal_left" == "$((square_root_table-1))" ]] && winner true
     done
 
     [ $count_play -eq ${#values[@]} ] && is_tie
 }
 
+
+sort_player(){
+    echo -e "\nSorting Player...\n" | awk '{print toupper($0)}'
+    sleep 1
+    player_turn=$[ ( $RANDOM % 2 )  + 1 ]
+    echo -e "\nPlayer $(current_player) is going first\n" 
+    sleep 1
+}
 
 plays(){
     [ $player_turn -eq 1 ] && values[$index]="X" || values[$index]="O" 
@@ -84,10 +93,9 @@ check_play(){
 }
 
 winner(){
-    #[ "$1" == "true" ] && echo "$(current_player) Win !!!" && exit
     if [ "$1" == "true" ]; then 
         echo "$(current_player) Win !!!"
-        save_csv $(current_player)
+        persistence $(current_player)
         exit
     fi
     echo false
@@ -95,24 +103,16 @@ winner(){
 
 is_tie(){
     echo "Tie !!!"
-    save_csv "Tie"
+    persistence "Tie"
     exit
-}
-
-
-save_csv(){
-    File="components/log.csv"
-    Header="Player1,Player2,Date,Winner,Modality"
-    [ -s $File ] || echo $Header >> $File
-    echo "$player1,$player2,`date`,$1,$square_root_table x $square_root_table" >> $File
 }
 
 
 start(){
     create_player
     re_isnumber="^[0-9]+$"
-    player_turn=1
-    echo -e "\nInsert the length of table (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
+    sort_player
+    echo -e "Insert the length of table (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
     check_length
     mount_array $resp_length
     square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
@@ -123,7 +123,7 @@ start(){
 menu(){
     _PRINT "title.txt"
     index=""
-    for option in "Start game" "About" "Exit"; do
+    for option in "Start game" "About" "Show History" "Clear History" "Exit"; do
         index=$(($index+1))
         echo "[$index]$option"
     done
@@ -131,7 +131,9 @@ menu(){
     case $choice in
         1) start;;
         2) _PRINT "about.txt" && menu;;
-        3) exit;;
+        3) show_persistence && menu;;
+        4) clear_persistence && menu;;
+        5) exit;;
     esac
 }
 

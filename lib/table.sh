@@ -1,5 +1,5 @@
 check_length(){
-    read -p "> " resp_length
+    read -p '> ' resp_length
     while ! [[ $resp_length =~ $re_isnumber ]] || [ $resp_length -gt 9 ] || [ $resp_length -lt 2 ]; do check_length resp_length; done
 }
 mount_array(){
