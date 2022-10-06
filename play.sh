@@ -17,7 +17,7 @@ check_board(){
         for (( j=$i; j<=$i+$square_root_table-2; j++ ))
         do
             [[ "${values[$j]}" == "${values[$((j+1))]}" ]] && count_row=$((count_row+1))
-            [[ $count_row -eq 2 ]] && winner true
+            [[ $count_row -eq $((in_a_row-1)) ]] && winner true
         done
     done
     #col
@@ -27,7 +27,7 @@ check_board(){
         for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
         do
             [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]] && count_col=$((count_col+1))
-            [[ $count_col -eq 2 ]] && winner true
+            [[ $count_col -eq $((in_a_row-1)) ]] && winner true
         done
     done
     #diagonal_right
@@ -35,14 +35,14 @@ check_board(){
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
     do
         [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
-        [[ $count_diagonal_right -eq 2 ]] && winner true
+        [[ $count_diagonal_right -eq $((in_a_row-1)) ]] && winner true
     done
     #diagonal_left
     count_diagonal_left=0
     for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
         [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
-        [[ $count_diagonal_left -eq 2 ]] && winner true
+        [[ $count_diagonal_left -eq $((in_a_row-1)) ]] && winner true
     done
 
     [ $count_play -eq ${#values[@]} ] && is_tie
@@ -108,6 +108,12 @@ is_tie(){
     exit
 }
 
+row_win_condition(){
+    read -p '>' in_a_row
+    if [[ $in_a_row -lt 3 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $square_root_table ]]; then
+        row_win_condition
+    fi 
+}
 
 reset(){
     count_play=0
@@ -118,10 +124,12 @@ start(){
     create_player
     re_isnumber="^[0-9]+$"
     sort_player
-    echo -e "Insert the length of table (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
+    echo -e "Insert the length of board (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
     check_length
     mount_array $resp_length
     square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
+    echo -e "How many in a row? Insert a number equal or greater than 3, less or equal the length of board"
+    row_win_condition
     show_table
     loop
 }
