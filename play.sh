@@ -17,7 +17,7 @@ check_board(){
         for (( j=$i; j<=$i+$square_root_table-2; j++ ))
         do
             [[ "${values[$j]}" == "${values[$((j+1))]}" ]] && count_row=$((count_row+1))
-            [[ "$count_row" == "$((square_root_table-1))" ]] && winner true
+            [[ $count_row -eq 2 ]] && winner true
         done
     done
     #col
@@ -27,7 +27,7 @@ check_board(){
         for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
         do
             [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]] && count_col=$((count_col+1))
-            [[ "$count_col" == "$((square_root_table-1))" ]] && winner true
+            [[ $count_col -eq 2 ]] && winner true
         done
     done
     #diagonal_right
@@ -35,14 +35,14 @@ check_board(){
     for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
     do
         [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
-        [[ "$count_diagonal_right" == "$((square_root_table-1))" ]] && winner true
+        [[ $count_diagonal_right -eq 2 ]] && winner true
     done
     #diagonal_left
     count_diagonal_left=0
     for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
     do
         [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
-        [[ "$count_diagonal_left" == "$((square_root_table-1))" ]] && winner true
+        [[ $count_diagonal_left -eq 2 ]] && winner true
     done
 
     [ $count_play -eq ${#values[@]} ] && is_tie
