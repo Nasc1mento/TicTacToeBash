@@ -4,21 +4,27 @@
 ## Description
 - It's a game written in Bash
 - Save the history using a CSV file
-- It's possible choose length of board
-- And choose win condition (3 in row like the classic 9x9 game)
+- Print and clear history
+- It's possible choose length of board (between 2x2 and 9x9)
+- And choose win condition (For example: 3 in row like the classic 3x3 game)
+- The logic works for any board
+- The going first player is random
 
 
 
+
+
+## To play
 - Clone the repository
 ```
 git clone https://github.com/Nasc1mento/TicTacToeBash
 ```
-- To grant the permissions
+- Grant the permissions
 ```
 cd TicTacToeBash/
 chmod +x play.sh
 ```
-- To execute
+- Execute and enjoy!!!
 ```
 ./play.sh
 ```
