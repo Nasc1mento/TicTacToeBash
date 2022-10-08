@@ -9,6 +9,8 @@ source ./lib/table.sh
 source ./lib/persistence.sh
 source ./lib/message.sh
 
+
+# check winner
 check_board(){
     count_play=$((count_play+1))
     #row
@@ -49,23 +51,25 @@ check_board(){
     [ $count_play -eq ${#values[@]} ] && is_tie
 }
 
-
+# sort player
 sort_player(){
-    echo -e "\nSorting Player...\n" | awk '{print toupper($0)}'
+    msg_sorting_player
     sleep 1
     player_turn=$[ ( $RANDOM % 2 )  + 1 ]
-    echo -e "\nPlayer $(current_player) is going first\n" 
+    msg_going_first_player
     sleep 1
 }
 
+# write O/X
 plays(){
     [ $player_turn -eq 1 ] && values[$index]="X" || values[$index]="O" 
 }
 
+# loop game
 loop(){
     while [ $(winner) == false ]
     do
-	echo "Turn: $(current_player)"
+        msg_current_player
         check_play
         plays index
         show_table
@@ -74,7 +78,7 @@ loop(){
     done
 }
 
-
+# change turn 
 change(){ 
     [ $player_turn -eq 1 ] && player_turn=2 || player_turn=1
 }
@@ -95,7 +99,7 @@ check_play(){
 
 winner(){
     if [ "$1" == "true" ]; then 
-        echo "$(current_player) Win !!!"
+        msg_player_winner
         persistence $(current_player)
         reset
         menu
@@ -104,8 +108,10 @@ winner(){
 }
 
 is_tie(){
-    echo "Tie !!!"
+    msg_tie
     persistence "Tie"
+    reset
+    menu
     exit
 }
 
@@ -125,10 +131,10 @@ start(){
     create_player
     re_isnumber="^[0-9]+$"
     sort_player
-    echo -e "Insert the length of board (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
+    msg_board_length
     check_length
     mount_array $resp_length
-    echo -e "How many in a row? Insert a number equal or greater than 3, less or equal the length of board"
+    msg_in_a_row
     row_win_condition
     show_table
     loop
