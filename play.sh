@@ -7,41 +7,42 @@
 source ./lib/print_components.sh
 source ./lib/table.sh
 source ./lib/persistence.sh
+source ./lib/message.sh
 
 check_board(){
     count_play=$((count_play+1))
     #row
-    for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
+    for (( i=1; i<=${#values[@]}; i+=$resp_length ))
     do
         count_row=0
-        for (( j=$i; j<=$i+$square_root_table-2; j++ ))
+        for (( j=$i; j<=$i+$resp_length-2; j++ ))
         do
             [[ "${values[$j]}" == "${values[$((j+1))]}" ]] && count_row=$((count_row+1))
             [[ $count_row -eq $((in_a_row-1)) ]] && winner true
         done
     done
     #col
-    for (( i=1; i<=$square_root_table; i++ ))
+    for (( i=1; i<=$resp_length; i++ ))
     do
         count_col=0
-        for (( j=$i; j<=${#values[@]}; j+=$square_root_table ))
+        for (( j=$i; j<=${#values[@]}; j+=$resp_length ))
         do
-            [[ "${values[$j]}" == "${values[$((j+square_root_table))]}" ]] && count_col=$((count_col+1))
+            [[ "${values[$j]}" == "${values[$((j+resp_length))]}" ]] && count_col=$((count_col+1))
             [[ $count_col -eq $((in_a_row-1)) ]] && winner true
         done
     done
     #diagonal_right
     count_diagonal_right=0
-    for (( j=1; j<=${#values[@]}; j+=$square_root_table+1 ))
+    for (( j=1; j<=${#values[@]}; j+=$resp_length+1 ))
     do
-        [[ "${values[$j]}" == "${values[$((j+square_root_table+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
+        [[ "${values[$j]}" == "${values[$((j+resp_length+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
         [[ $count_diagonal_right -eq $((in_a_row-1)) ]] && winner true
     done
     #diagonal_left
     count_diagonal_left=0
-    for (( j=$square_root_table; j<=${#values[@]}; j+=$square_root_table-1 ))
+    for (( j=$resp_length; j<=${#values[@]}; j+=$resp_length-1 ))
     do
-        [[ "${values[$j]}" == "${values[$((j+square_root_table-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
+        [[ "${values[$j]}" == "${values[$((j+resp_length-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
         [[ $count_diagonal_left -eq $((in_a_row-1)) ]] && winner true
     done
 
@@ -110,7 +111,7 @@ is_tie(){
 
 row_win_condition(){
     read -p '>' in_a_row
-    if [[ $in_a_row -lt 3 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $square_root_table ]]; then
+    if [[ $in_a_row -lt 3 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $resp_length ]]; then
         row_win_condition
     fi 
 }
@@ -127,7 +128,6 @@ start(){
     echo -e "Insert the length of board (Ex.: 3->3x3; 4->4x4...) between 2 and 9"
     check_length
     mount_array $resp_length
-    square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
     echo -e "How many in a row? Insert a number equal or greater than 3, less or equal the length of board"
     row_win_condition
     show_table
@@ -150,5 +150,4 @@ menu(){
         5) exit;;
     esac
 }
-
 menu

@@ -10,13 +10,13 @@ mount_array(){
 }
 
 table_core(){
-	for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
+	for (( i=1; i<=${#values[@]}; i+=$resp_length ))
 	do
 		#reset
 		middle_top=""
 		middle_core=""
 		middle_bottom=""
-		for (( j=$i; j<=$i+$square_root_table-1; j++ ))
+		for (( j=$i; j<=$i+$resp_length-1; j++ ))
 		do
 			middle_core+="_____|"
 			middle_bottom+="     |"
@@ -25,7 +25,7 @@ table_core(){
 		done
 		echo -e "\t|$middle_top"
 		echo -e "\t|$middle_core"
-		[[ $i == $(( ${#values[@]} - $square_root_table + 1)) ]] && break || echo -e "\t|$middle_bottom"
+		[[ $i == $(( ${#values[@]} - $resp_length + 1)) ]] && break || echo -e "\t|$middle_bottom"
 	done
 }
 
@@ -33,7 +33,7 @@ table_core(){
 table_top(){
 	#reset
 	top=""
-	for (( i=1; i<=${#values[@]}; i+=$square_root_table ))
+	for (( i=1; i<=${#values[@]}; i+=$resp_length ))
 	do
 		top+="‾‾‾‾‾|"
 	done
@@ -44,3 +44,5 @@ show_table(){
 	table_top
 	table_core
 }
+
+#square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
