@@ -5,12 +5,12 @@ check_length(){
 mount_array(){
     for (( i=1; i<=$resp_length*$resp_length; i++ ))
     do
-        values[$i]=$i
+        board[$i]=$i
     done
 }
 
 table_core(){
-	for (( i=1; i<=${#values[@]}; i+=$resp_length ))
+	for (( i=1; i<=${#board[@]}; i+=$resp_length ))
 	do
 		#reset
 		middle_top=""
@@ -20,12 +20,12 @@ table_core(){
 		do
 			middle_core+="_____|"
 			middle_bottom+="     |"
-			if ! [[ ${values[$j]} =~ $re_isnumber ]]; then middle_top+="  ${values[j]}  |"; continue; fi
-			[ $j -ge 10 ] && middle_top+="  ${values[j]} |" || middle_top+="  ${values[j]}  |"
+			if ! [[ ${board[$j]} =~ $re_isnumber ]]; then middle_top+="  ${board[j]}  |"; continue; fi
+			[ $j -ge 10 ] && middle_top+="  ${board[j]} |" || middle_top+="  ${board[j]}  |"
 		done
 		echo -e "\t|$middle_top"
 		echo -e "\t|$middle_core"
-		[[ $i == $(( ${#values[@]} - $resp_length + 1)) ]] && break || echo -e "\t|$middle_bottom"
+		[[ $i == $(( ${#board[@]} - $resp_length + 1)) ]] && break || echo -e "\t|$middle_bottom"
 	done
 }
 
@@ -33,7 +33,7 @@ table_core(){
 table_top(){
 	#reset
 	top=""
-	for (( i=1; i<=${#values[@]}; i+=$resp_length ))
+	for (( i=1; i<=${#board[@]}; i+=$resp_length ))
 	do
 		top+="‾‾‾‾‾|"
 	done
@@ -45,4 +45,4 @@ show_table(){
 	table_core
 }
 
-#square_root_table=$(echo "${#values[@]}" | awk '{print sqrt($1)}')
+#square_root_table=$(echo "${#board[@]}" | awk '{print sqrt($1)}')

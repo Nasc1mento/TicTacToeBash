@@ -11,15 +11,15 @@ source ./lib/message.sh
 
 
 # check winner
-check_board(){
+check_winner(){
     count_play=$((count_play+1))
     #row
-    for (( i=1; i<=${#values[@]}; i+=$resp_length ))
+    for (( i=1; i<=${#board[@]}; i+=$resp_length ))
     do
         count_row=0
         for (( j=$i; j<=$i+$resp_length-2; j++ ))
         do
-            [[ "${values[$j]}" == "${values[$((j+1))]}" ]] && count_row=$((count_row+1))
+            [[ "${board[$j]}" == "${board[$((j+1))]}" ]] && count_row=$((count_row+1))
             [[ $count_row -eq $((in_a_row-1)) ]] && winner true
         done
     done
@@ -27,28 +27,28 @@ check_board(){
     for (( i=1; i<=$resp_length; i++ ))
     do
         count_col=0
-        for (( j=$i; j<=${#values[@]}; j+=$resp_length ))
+        for (( j=$i; j<=${#board[@]}; j+=$resp_length ))
         do
-            [[ "${values[$j]}" == "${values[$((j+resp_length))]}" ]] && count_col=$((count_col+1))
+            [[ "${board[$j]}" == "${board[$((j+resp_length))]}" ]] && count_col=$((count_col+1))
             [[ $count_col -eq $((in_a_row-1)) ]] && winner true
         done
     done
     #diagonal_right
     count_diagonal_right=0
-    for (( j=1; j<=${#values[@]}; j+=$resp_length+1 ))
+    for (( j=1; j<=${#board[@]}; j+=$resp_length+1 ))
     do
-        [[ "${values[$j]}" == "${values[$((j+resp_length+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
+        [[ "${board[$j]}" == "${board[$((j+resp_length+1))]}" ]] && count_diagonal_right=$((count_diagonal_right+1))
         [[ $count_diagonal_right -eq $((in_a_row-1)) ]] && winner true
     done
     #diagonal_left
     count_diagonal_left=0
-    for (( j=$resp_length; j<=${#values[@]}; j+=$resp_length-1 ))
+    for (( j=$resp_length; j<=${#board[@]}; j+=$resp_length-1 ))
     do
-        [[ "${values[$j]}" == "${values[$((j+resp_length-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
+        [[ "${board[$j]}" == "${board[$((j+resp_length-1))]}" ]] && count_diagonal_left=$((count_diagonal_left+1))
         [[ $count_diagonal_left -eq $((in_a_row-1)) ]] && winner true
     done
 
-    [ $count_play -eq ${#values[@]} ] && is_tie
+    [ $count_play -eq ${#board[@]} ] && is_tie
 }
 
 # sort player
@@ -61,8 +61,8 @@ sort_player(){
 }
 
 # write O/X
-plays(){
-    [ $player_turn -eq 1 ] && values[$index]="X" || values[$index]="O" 
+write(){
+    [ $player_turn -eq 1 ] && board[$index]="X" || board[$index]="O" 
 }
 
 # loop game
@@ -71,9 +71,9 @@ loop(){
     do
         msg_current_player
         check_play
-        plays index
+        write index
         show_table
-        check_board
+        check_winner
         change
     done
 }
@@ -94,7 +94,7 @@ current_player(){
 
 check_play(){
     read -p "> " index
-    if ! [[ $index =~ $re_isnumber ]] || ! [[ ${values[$index]} =~ $re_isnumber ]]; then check_play index; fi
+    if ! [[ $index =~ $re_isnumber ]] || ! [[ ${board[$index]} =~ $re_isnumber ]]; then check_play index; fi
 }
 
 winner(){
@@ -119,12 +119,12 @@ row_win_condition(){
     read -p '>' in_a_row
     if [[ $in_a_row -lt 3 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $resp_length ]]; then
         row_win_condition
-    fi 
+    fi
 }
 
 reset(){
     count_play=0
-    values=()
+    board=()
 }
 
 start(){
