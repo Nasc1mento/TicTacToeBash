@@ -117,7 +117,7 @@ is_tie(){
 
 row_win_condition(){
     read -p '>' in_a_row
-    if [[ $in_a_row -lt 3 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $resp_length ]]; then
+    if [[ $in_a_row -lt 2 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $resp_length ]]; then
         row_win_condition
     fi
 }
