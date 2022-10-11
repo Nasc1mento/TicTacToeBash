@@ -28,4 +28,12 @@ chmod +x play.sh
 ```
 ./play.sh
 ```
+## Or try on Replit
+- To play
+
+[Replit](https://replit.com/@AdryanReis/TicTacToeBash?v=1)
+
+- To import
+
+[![Run on Repl.it](https://repl.it/badge/github/Nasc1mento/TictacToeBash)](https://replit.com/@AdryanReis/TicTacToeBash?v=1)
 
