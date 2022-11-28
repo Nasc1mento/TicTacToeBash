@@ -1,10 +1,10 @@
 File="components/log.csv"
-Header="Player1,Player2,Date,Winner,Modality,InARow Modality"
+Header="Player1,Player2,Date,Winner,Modality,InARowModality"
 
 #write persistence
 persistence(){
     [ -s $File ] || echo $Header >> $File
-    echo "$player1,$player2,`date`,$1,$square_root_table x $square_root_table,$in_a_row" >> $File
+    echo "$player1,$player2,`date`,$1,$resp_length x $resp_length,$in_a_row" >> $File
 }
 
 # show
