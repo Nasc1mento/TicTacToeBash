@@ -25,3 +25,7 @@ msg_player_winner(){
 msg_tie(){
     echo "Tie !!!"
 }
+
+msg_wrong_play(){
+    echo "Wrong play, try again"
+}

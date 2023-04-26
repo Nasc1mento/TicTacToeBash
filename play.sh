@@ -72,6 +72,7 @@ loop(){
         msg_current_player
         check_play
         write index
+        clear
         show_table
         check_winner
         change
@@ -83,30 +84,36 @@ change(){
     [ $player_turn -eq 1 ] && player_turn=2 || player_turn=1
 }
 
+# create player
 create_player(){
     read -p "Player 1 name: " player1
     read -p "Player 2 name: " player2
 }
 
+# return current player
 current_player(){
     [ $player_turn -eq 1 ] && echo $player1 || echo $player2
 }
 
+# check valid play
 check_play(){
     read -p "> " index
-    if ! [[ $index =~ $re_isnumber ]] || ! [[ ${board[$index]} =~ $re_isnumber ]]; then check_play index; fi
+    if ! [[ $index =~ $re_isnumber ]] || ! [[ ${board[$index]} =~ $re_isnumber ]]; then msg_wrong_play && check_play index; fi
 }
 
+# echo winner
 winner(){
-    if [ "$1" == "true" ]; then 
-        msg_player_winner
+    if [ "$1" == "true" ]; then        
         persistence $(current_player)
         reset
+        clear
+        msg_player_winner
         menu
     fi
     echo false
 }
 
+# if tie
 is_tie(){
     msg_tie
     persistence "Tie"
@@ -115,6 +122,7 @@ is_tie(){
     exit
 }
 
+# select in a row win condition
 row_win_condition(){
     read -p '>' in_a_row
     if [[ $in_a_row -lt 2 ]] || [[ $in_a_row -gt 20 ]] || [[ $in_a_row -gt $resp_length ]]; then
@@ -122,11 +130,13 @@ row_win_condition(){
     fi
 }
 
+# reset play and board
 reset(){
     count_play=0
     board=()
 }
 
+# start game
 start(){
     create_player
     re_isnumber="^[0-9]+$"
@@ -136,10 +146,12 @@ start(){
     mount_array $resp_length
     msg_in_a_row
     row_win_condition
+    clear
     show_table
     loop
 }
 
+# menu
 menu(){
     _PRINT "title.txt"
     index=""
@@ -149,11 +161,12 @@ menu(){
     done
     read -p $'\n> ' choice
     case $choice in
-        1) start;;
-        2) _PRINT "about.txt" && menu;;
-        3) show_persistence && menu;;
-        4) clear_persistence && menu;;
+        1) clear && start;;
+        2) clear && _PRINT "about.txt" && menu;;
+        3) clear && show_persistence && menu;;
+        4) clear && clear_persistence && menu;;
         5) exit;;
+        *) clear && echo -e "Invalid option !!!" && menu;;
     esac
 }
 menu
