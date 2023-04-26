@@ -35,7 +35,7 @@ chmod +x play.sh
 
 - To import
 
-[![Run on Repl.it](https://repl.it/badge/github/Nasc1mento/TictacToeBash)](https://replit.com/@AdryanReis/TicTacToeBash?v=1)
+[![Run on Repl.it](https://repl.it/badge/github/Nasc1mento/TictacToeBash)](https://replit.com/@fallen-of-albaz/TicTacToeBash?v=1)
 
 ## License
 [MIT](https://github.com/Nasc1mento/TicTacToeBash/blob/main/LICENSE)
